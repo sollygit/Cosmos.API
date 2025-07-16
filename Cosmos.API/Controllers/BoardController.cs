@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cosmos.Api.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
+    [ApiExplorerSettings(GroupName = "cosmosdb")]
     [Route("api/[controller]")]
     public class BoardController : ControllerBase
     {

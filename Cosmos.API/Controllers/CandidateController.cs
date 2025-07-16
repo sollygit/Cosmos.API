@@ -2,18 +2,17 @@
 using Cosmos.Api.Services;
 using Cosmos.Common;
 using Cosmos.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace Cosmos.Api.Controllers
 {
-    [ApiExplorerSettings(GroupName = "v1")]
+    [ApiExplorerSettings(GroupName = "cosmosdb")]
     [Route("api/[controller]")]
     public class CandidateController : ControllerBase
     {
@@ -44,42 +43,20 @@ namespace Cosmos.Api.Controllers
         }
 
         [HttpGet("[action]/{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get(string id, [FromQuery] ResidentialType? residentialType = null)
         {
-            if (string.IsNullOrEmpty(id))
+            try
             {
-                return BadRequest();
+                var candidate = await _candidateService.GetAsync(id);
+                return new ObjectResult(candidate);
             }
-
-            var candidate = await _candidateService.GetAsync(id);
-
-            if (candidate == null)
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError($"Item {id} could not be found: {ex.Message}");
+                _logger.LogError($"ResidentialType:{residentialType}");
+
+                return new NotFoundObjectResult(id);
             }
-
-            return new ObjectResult(candidate);
-        }
-
-        [HttpGet("{residentialType}")]
-        public ActionResult Get(ResidentialType residentialType = ResidentialType.InState)
-        {
-            _logger.LogInformation($"query {residentialType} candidates");
-            if (residentialType == ResidentialType.International)
-            {
-                _logger.LogInformation("found 10000 candidates.");
-            }
-            return Ok();
-        }
-
-        [HttpGet("{id:int}/Forms/{formId:int}")]
-        [ProducesResponseType(typeof(FormSubmissionResult), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<FormSubmissionResult> ViewForm(int id, int formId)
-        {
-            _logger.LogInformation($"viewing the form#{formId} for Candidate ID={id}");
-            await Task.Delay(1000);
-            return new FormSubmissionResult { FormId = formId, CandidateId = id };
         }
 
         [HttpPost("[action]")]
@@ -111,19 +88,6 @@ namespace Cosmos.Api.Controllers
         {
             var result = await _candidateService.CreateAsync(count, saveToDatabase);
             return new ObjectResult(result);
-        }
-
-        [HttpPost("{id:int}/Forms")]
-        [ProducesResponseType(typeof(FormSubmissionResult), StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<FormSubmissionResult>> SubmitForm(int id, [FromForm] CandidateForm form)
-        {
-            _logger.LogInformation($"validating the form#{form.FormId} for Candidate ID={id}");
-            _logger.LogInformation($"saving file [{form.CandidateFile.FileName}]");
-            await Task.Delay(1500);
-            _logger.LogInformation("file saved.");
-            var result = new FormSubmissionResult { FormId = form.FormId, CandidateId = id };
-            return CreatedAtAction(nameof(ViewForm), new { id, form.FormId }, result);
         }
 
         [HttpPut("[action]/{id}")]
@@ -183,16 +147,6 @@ namespace Cosmos.Api.Controllers
             await _candidateService.CreateDummyAsync();
 
             return Ok(new { Message = $"{candidates.Count()} candidates have been deleted" });
-        }
-
-        [ApiExplorerSettings(IgnoreApi = true)]
-        [HttpDelete("{id:int}/Forms/{formId:int}")]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
-        public async Task<bool> Delete(int id, int formId)
-        {
-            _logger.LogInformation($"deleting the form#{formId} for candidate ID=[{id}]");
-            await Task.Delay(1500);
-            return true;
         }
     }
 }

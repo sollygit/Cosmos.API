@@ -30,7 +30,7 @@ namespace Cosmos.Api
                 options.CosmosConnectionString = Configuration["RepositoryOptions:CosmosConnectionString"];
             });
             services.AddSingleton<ICandidateService, CandidateService>();
-            services.AddSingleton<ICloudTableService, CloudTableService>();
+            services.AddSingleton<ICloudTableService, BoardCloudTableService>();
             services.AddSingleton<IStorageService, BlobStorageService>();
             services.AddCors(options => {
                 options.AddPolicy("CorsPolicy", builder => builder
@@ -45,17 +45,9 @@ namespace Cosmos.Api
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {
-                    Version = "v1",
-                    Title = "CosmosDB API",
-                    Description = "A CosmosDB Web API",
-                    Contact = new OpenApiContact {
-                        Name = @"GitHub Repository",
-                        Email = string.Empty,
-                        Url = new Uri("https://github.com/sollygit/Cosmos.Api")
-                    }
-                });
-                c.SwaggerDoc("v2", new OpenApiInfo { Version = "v2", Title = "Blob Storage API" });
+                c.SwaggerDoc("cosmosdb", new OpenApiInfo { Version = "v1", Title = "CosmosDB" });
+                c.SwaggerDoc("storage", new OpenApiInfo { Version = "v1", Title = "Blob Storage" });
+                c.SwaggerDoc("forms", new OpenApiInfo { Version = "v1", Title = "Form Submission" });
             });
         }
 
@@ -69,8 +61,9 @@ namespace Cosmos.Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "CosmosDB API");
-                c.SwaggerEndpoint("/swagger/v2/swagger.json", "Blob Storage API");
+                c.SwaggerEndpoint("/swagger/cosmosdb/swagger.json", "CosmosDB API");
+                c.SwaggerEndpoint("/swagger/storage/swagger.json", "Blob Storage API");
+                c.SwaggerEndpoint("/swagger/forms/swagger.json", "Form Submission API");
                 c.DocumentTitle = "CosmosDB APIs";
                 c.DefaultModelsExpandDepth(0);
                 c.RoutePrefix = "";

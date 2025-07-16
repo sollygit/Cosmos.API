@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Cosmos.Api.Controllers
 {
     [ApiController]
-    [ApiExplorerSettings(GroupName = "v2")]
+    [ApiExplorerSettings(GroupName = "storage")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     public class BlobController : ControllerBase

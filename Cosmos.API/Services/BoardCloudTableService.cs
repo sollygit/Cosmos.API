@@ -19,14 +19,14 @@ namespace Cosmos.Api.Services
         Task<IEnumerable<Chart>> GetBoardData();
     }
 
-    public class CloudTableService : ICloudTableService
+    public class BoardCloudTableService : ICloudTableService
     {
         readonly StorageOptions _config;
         const string TABLE_NAME = "board";
         const string PARTITION_KEY = "BOARD";
         CloudTable table;
 
-        public CloudTableService(IOptions<StorageOptions> config)
+        public BoardCloudTableService(IOptions<StorageOptions> config)
         {
             _config = config.Value;
             AsyncHelper.RunAsync(async () => {
