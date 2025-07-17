@@ -14,32 +14,32 @@ namespace Cosmos.Api.Controllers
 {
     [ApiExplorerSettings(GroupName = "cosmosdb")]
     [Route("api/[controller]")]
-    public class CandidateController : ControllerBase
+    public class MovieController : ControllerBase
     {
-        private readonly ILogger<CandidateController> _logger;
-        private readonly IHubContext<CandidateHub> _hub;
-        readonly ICandidateService _candidateService;
+        private readonly ILogger<MovieController> _logger;
+        private readonly IHubContext<MovieHub> _hub;
+        readonly IMovieService _movieService;
 
-        public CandidateController(ILogger<CandidateController> logger, IHubContext<CandidateHub> hub, ICandidateService candidateService)
+        public MovieController(ILogger<MovieController> logger, IHubContext<MovieHub> hub, IMovieService movieService)
         {
             _logger = logger;
             _hub = hub;
-            _candidateService = candidateService;
+            _movieService = movieService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> SendCandidates()
+        public async Task<IActionResult> SendMovies()
         {
-            var candidates = await _candidateService.GetAsync();
-            await _hub.Clients.All.SendAsync("sendCandidates", candidates);
-            return Ok(new { Message = "sendCandidates success" });
+            var items = await _movieService.GetAsync();
+            await _hub.Clients.All.SendAsync("sendMovies", items);
+            return Ok(new { Message = "SendMovies success" });
         }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> All()
         {
-            var candidates = await _candidateService.GetAsync();
-            return new ObjectResult(candidates);
+            var items = await _movieService.GetAsync();
+            return new ObjectResult(items);
         }
 
         [HttpGet("[action]/{id}")]
@@ -47,51 +47,50 @@ namespace Cosmos.Api.Controllers
         {
             try
             {
-                var candidate = await _candidateService.GetAsync(id);
-                return new ObjectResult(candidate);
+                var item = await _movieService.GetAsync(id);
+                return Ok(item);
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Item {id} could not be found: {ex.Message}");
                 _logger.LogError($"ResidentialType:{residentialType}");
-
-                return new NotFoundObjectResult(id);
+                return NotFound(id);
             }
         }
 
         [HttpPost("[action]")]
-        public async Task<IActionResult> Create([FromBody] Candidate candidate)
+        public async Task<IActionResult> Create([FromBody] Movie movie)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _candidateService.CreateAsync(candidate);
+            var result = await _movieService.CreateAsync(movie);
 
             return new ObjectResult(result);
         }
 
         [HttpPost("[action]/Collection")]
-        public async Task<IActionResult> Create([FromBody] IEnumerable<Candidate> candidates)
+        public async Task<IActionResult> Create([FromBody] IEnumerable<Movie> movies)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var result = await _candidateService.CreateAsync(candidates);
+            var result = await _movieService.CreateAsync(movies);
             return new ObjectResult(result);
         }
 
         [HttpPost("[action]/{count}/{saveToDatabase}")]
         public async Task<IActionResult> Generate(int count, bool saveToDatabase = false)
         {
-            var result = await _candidateService.CreateAsync(count, saveToDatabase);
+            var result = await _movieService.CreateAsync(count, saveToDatabase);
             return new ObjectResult(result);
         }
 
         [HttpPut("[action]/{id}")]
-        public async Task<ActionResult> Update(string id, [FromBody] Candidate candidate)
+        public async Task<ActionResult> Update(string id, [FromBody] Movie movie)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -103,19 +102,19 @@ namespace Cosmos.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != candidate.Id)
+            if (id != movie.Id)
             {
                 return BadRequest(ModelState);
             }
 
-            var original = await _candidateService.GetAsync(id);
+            var original = await _movieService.GetAsync(id);
 
             if (original == null)
             {
                 return NotFound(id);
             }
 
-            var result = await _candidateService.UpdateAsync(candidate.Id, original.LastName, candidate);
+            var result = await _movieService.UpdateAsync(movie.Id, movie);
 
             return new ObjectResult(result);
         }
@@ -123,30 +122,34 @@ namespace Cosmos.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id)) return BadRequest();
+
+            try
             {
-                return BadRequest();
+                var item = await _movieService.DeleteAsync(id);
+                return Ok(item);
             }
-
-            var result = await _candidateService.DeleteAsync(id);
-
-            return Ok(result);
+            catch (Exception ex)
+            {
+                _logger.LogError($"Item {id} could not be found: {ex.Message}");
+                return new NotFoundObjectResult(id);
+            }
         }
 
         [HttpDelete("All")]
         public async Task<IActionResult> Delete()
         {
-            var candidates = await _candidateService.GetAsync();
+            var items = await _movieService.GetAsync();
 
-            foreach (var candidate in candidates)
+            foreach (var item in items)
             {
-                await _candidateService.DeleteAsync(candidate.Id);
+                await _movieService.DeleteAsync(item.Id);
             }
 
-            // Insert a dummy candidate to allow for a change feed trigger
-            await _candidateService.CreateDummyAsync();
+            // Insert a dummy item to allow for a change feed trigger
+            await _movieService.CreateDummyAsync();
 
-            return Ok(new { Message = $"{candidates.Count()} candidates have been deleted" });
+            return Ok(new { Message = $"{items.Count()} items have been deleted" });
         }
     }
 }

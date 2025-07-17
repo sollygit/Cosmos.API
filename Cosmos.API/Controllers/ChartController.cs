@@ -14,12 +14,12 @@ namespace Cosmos.Api.Controllers
     public class ChartController : ControllerBase
     {
         private readonly IHubContext<ChartHub> _hub;
-        readonly ICandidateService _candidateService;
+        readonly IMovieService _movieService;
 
-        public ChartController(IHubContext<ChartHub> hub, ICandidateService candidateService)
+        public ChartController(IHubContext<ChartHub> hub, IMovieService movieService)
         {
             _hub = hub;
-            _candidateService = candidateService;
+            _movieService = movieService;
         }
 
         [HttpGet]
@@ -39,12 +39,12 @@ namespace Cosmos.Api.Controllers
 
         async Task<IEnumerable<Chart>> GetChartData()
         {
-            var candidates = await _candidateService.GetAsync();
-            var technologies = candidates.Select(o => o.Technologies).Where(o => o != null);
+            var movies = await _movieService.GetAsync();
+            var genereList = movies.Select(o => o.Genre).Where(o => o != null);
             var lstChart = new List<Chart>();
             var dictionary = new Dictionary<string, int>();
 
-            foreach (var arr in technologies)
+            foreach (var arr in genereList)
             {
                 arr.ToList().ForEach(key => {
                     if (!dictionary.TryGetValue(key, out int value))

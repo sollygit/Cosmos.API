@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System;
 
 namespace Cosmos.Api
 {
@@ -29,7 +28,7 @@ namespace Cosmos.Api
             services.AddCosmosRepository(options => {
                 options.CosmosConnectionString = Configuration["RepositoryOptions:CosmosConnectionString"];
             });
-            services.AddSingleton<ICandidateService, CandidateService>();
+            services.AddSingleton<IMovieService, MovieService>();
             services.AddSingleton<ICloudTableService, BoardCloudTableService>();
             services.AddSingleton<IStorageService, BlobStorageService>();
             services.AddCors(options => {
@@ -77,7 +76,7 @@ namespace Cosmos.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<CandidateHub>("/candidate");
+                endpoints.MapHub<MovieHub>("/movie");
                 endpoints.MapHub<ChartHub>("/chart");
                 endpoints.MapHub<BoardHub>("/board");
             });

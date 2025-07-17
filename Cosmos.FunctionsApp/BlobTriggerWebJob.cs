@@ -25,7 +25,7 @@ namespace Cosmos.FunctionsApp
             {
                 var jsonRequest = await new StreamReader(stream).ReadToEndAsync();
                 var jsonContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
-                var uriBuilder = new UriBuilder($"{_cosmosApi}/api/Candidate/Create/Collection");
+                var uriBuilder = new UriBuilder($"{_cosmosApi}/api/Movie/Create/Collection");
                 var response = await _client.PostAsync(uriBuilder.Uri, jsonContent);
                 var content = await response.Content.ReadAsStringAsync();
 

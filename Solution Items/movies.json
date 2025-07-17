@@ -1,0 +1,116 @@
+[
+  {
+    "movieID": "CW0076759",
+    "title": "Star Wars: Episode IV - A New Hope",
+    "releaseDate": "2008-10-18",
+    "year": "2008",
+    "poster": "https://picsum.photos/g/640/480/?image=1002",
+    "price": 457.25,
+    "genre": [
+      "Adventure",
+      "Science Fiction",
+      "Fantasy"
+    ],
+    "movieRatings": [
+      {
+        "rated": "PG",
+        "language": "English",
+        "metascore": 75,
+        "rating": 8.70,
+        "votes": "515,157"
+      },
+      {
+        "rated": "PG",
+        "language": "Spanish",
+        "metascore": 92,
+        "rating": 9.20,
+        "votes": "915,459"
+      }
+    ],
+    "isActive": true
+  },
+  {
+    "movieID": "CW0080684",
+    "title": "Star Wars: Episode V - The Empire Strikes Back",
+    "releaseDate": "2018-05-20",
+    "year": "2018",
+    "poster": "https://picsum.photos/g/640/480/?image=863",
+    "price": 463.20,
+    "genre": [
+      "Documentary",
+      "Television"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  },
+  {
+    "movieID": "CW0086190",
+    "title": "Star Wars: Episode VI - Return of the Jedi",
+    "releaseDate": "2020-01-10",
+    "year": "2020",
+    "poster": "https://picsum.photos/g/640/480/?image=475",
+    "price": 429.56,
+    "genre": [
+      "Adventure",
+      "Thriller"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  },
+  {
+    "movieID": "CW2488496",
+    "title": "Star Wars: The Force Awakens",
+    "releaseDate": "2021-01-10",
+    "year": "2021",
+    "poster": "https://picsum.photos/g/640/480/?image=160",
+    "price": 419.76,
+    "genre": [
+      "Fantasy",
+      "Action"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  },
+  {
+    "movieID": "CW0120915",
+    "title": "Star Wars: Episode I - The Phantom Menace",
+    "releaseDate": "2019-03-10",
+    "year": "2019",
+    "poster": "https://picsum.photos/g/640/480/?image=760",
+    "price": 434.98,
+    "genre": [
+      "Romance",
+      "Adventure"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  },
+  {
+    "movieID": "CW0121766",
+    "title": "Star Wars: Episode III - Revenge of the Sith",
+    "releaseDate": "2018-04-11",
+    "year": "2018",
+    "poster": "https://picsum.photos/g/640/480/?image=2",
+    "price": 387.99,
+    "genre": [
+      "Science Fiction",
+      "Comedy"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  },
+  {
+    "movieID": "CW0121765",
+    "title": "Star Wars: Episode II - Attack of the Clones",
+    "releaseDate": "2017-11-15",
+    "year": "2017",
+    "poster": "https://picsum.photos/g/640/480/?image=222",
+    "price": 90.37,
+    "genre": [
+      "Action",
+      "Drama"
+    ],
+    "movieRatings": [],
+    "isActive": true
+  }
+]

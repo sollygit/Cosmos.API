@@ -12,85 +12,85 @@ namespace Cosmos.UnitTests
     [TestFixture]
     public class CandidateServiceTest
     {
-        private IQueryable<Candidate> candidates;
-        private List<string> technologies;
+        private IQueryable<Movie> movies;
+        private List<string> genres;
 
         [SetUp]
         public void Setup()
         {
-            candidates = new List<Candidate>()
+            movies = new List<Movie>()
             {
-                new Candidate(){ Id = Guid.NewGuid().ToString("n"), FirstName = "FirstName_1", LastName = "LastName_1"  },
-                new Candidate(){ Id = Guid.NewGuid().ToString("n"), FirstName = "FirstName_2", LastName = "LastName_2"  },
-                new Candidate(){ Id = Guid.NewGuid().ToString("n"), FirstName = "FirstName_3", LastName = "LastName_3"  }
+                new Movie(){ Id = Guid.NewGuid().ToString("n"), Title = "Title_1" },
+                new Movie(){ Id = Guid.NewGuid().ToString("n"), Title = "Title_2" },
+                new Movie(){ Id = Guid.NewGuid().ToString("n"), Title = "Title_3" }
             }.AsQueryable();
 
-            technologies = new List<string>() { "Azure", "SQL", "C#", "Angular", "HTML", "CSS" };
+            genres = new List<string>() { "Action", "Adventure", "Comedy", "Documentary", "Drama", "Fantasy" };
         }
 
         [Test]
         public async Task GetAll_Success()
         {
             // Arrange
-            var mockService = new Mock<ICandidateService>();
+            var mockService = new Mock<IMovieService>();
             mockService.Setup(x => x.GetAsync()).Returns(async () =>
             {
                 await Task.Yield();
-                return candidates;
+                return movies;
             });
 
             // Act
             var actual = await mockService.Object.GetAsync();
 
             // Assert
-            Assert.AreEqual(candidates.Count(), actual.Count());
+            Assert.AreEqual(movies.Count(), actual.Count());
         }
 
         [Test]
         public async Task Get_Success()
         {
             // Arrange
-            var candidate = new Candidate
+            var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                FirstName = "Solly",
-                LastName = "Fathi",
-                Technologies = technologies.Take(2).ToArray()
+                Title = "Kingdom of the Planet of the Apes",
+                Price = 100,
+                Genre = genres.Take(2).ToArray()
             };
 
-            var mockService = new Mock<ICandidateService>();
-            mockService.Setup(x => x.GetAsync(candidate.Id)).Returns(async () =>
+            var mockService = new Mock<IMovieService>();
+            mockService.Setup(x => x.GetAsync(item.Id)).Returns(async () =>
             {
                 await Task.Yield();
-                return candidate;
+                return item;
             });
 
             // Act
-            await mockService.Object.CreateAsync(candidate);
-            var actual = await mockService.Object.GetAsync(candidate.Id);
+            await mockService.Object.CreateAsync(item);
+            var actual = await mockService.Object.GetAsync(item.Id);
 
             // Assert
-            Assert.AreEqual(candidate, actual);
+            Assert.AreEqual(item, actual);
         }
 
         [Test]
         public async Task Get_NotFound_Success()
         {
             // Arrange
-            var candidateId = Guid.NewGuid().ToString();
-            var mockService = new Mock<ICandidateService>();
+            var itemId = Guid.NewGuid().ToString();
+            var mockService = new Mock<IMovieService>();
 
-            mockService.Setup(x => x.GetAsync(candidateId)).Returns(async () =>
+            mockService.Setup(x => x.GetAsync(itemId)).Returns(async () =>
             {
                 await Task.Yield();
                 return null;
             });
 
             // Act
-            var actual = await mockService.Object.GetAsync(candidateId);
+            var actual = await mockService.Object.GetAsync(itemId);
 
             // Assert
-            mockService.Verify(m => m.GetAsync(candidateId), Times.AtLeastOnce());
+            mockService.Verify(m => m.GetAsync(itemId), Times.AtLeastOnce());
             Assert.AreEqual(null, actual);
         }
 
@@ -98,58 +98,58 @@ namespace Cosmos.UnitTests
         public async Task Add_Success()
         {
             // Arrange
-            var candidate = new Candidate
+            var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                FirstName = "Solly",
-                LastName = "Fathi",
-                Technologies = technologies.Take(2).ToArray()
+                Title = "Kingdom of the Planet of the Apes",
+                Price = 100,
+                Genre = genres.Take(2).ToArray()
             };
 
-            var mockService = new Mock<ICandidateService>();
-            mockService.Setup(x => x.CreateAsync(It.IsAny<Candidate>())).Returns(async () =>
+            var mockService = new Mock<IMovieService>();
+            mockService.Setup(x => x.CreateAsync(It.IsAny<Movie>())).Returns(async () =>
             {
                 await Task.Yield();
-                return candidate;
+                return item;
             });
 
             // Act
-            var actual = await mockService.Object.CreateAsync(candidate);
+            var actual = await mockService.Object.CreateAsync(item);
 
             // Assert
-            Assert.AreEqual(candidate, actual);
+            Assert.AreEqual(item, actual);
         }
 
         [Test]
         public void Add_IsNull_Failure_Throws()
         {
-            string errorMessage = "Candidate cannot be null";
+            string errorMessage = "Item cannot be null";
 
             // Arrange
-            var candidate = It.IsAny<Candidate>();
+            var item = It.IsAny<Movie>();
 
             // Act and Assert
             Assert.That(async () =>
-                await Add_ThrowException(candidate, errorMessage),
+                await Add_ThrowException(item, errorMessage),
                 Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(errorMessage));
         }
 
         [Test]
         public void Add_FirstNameIsEmpty_Failure_Throws()
         {
-            string errorMessage = "First name cannot be empty";
+            string errorMessage = "Title cannot be empty";
 
             // Arrange
-            var candidate = new Candidate
+            var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                LastName = "Fathi",
-                Technologies = technologies.Take(2).ToArray()
+                Title = "Kingdom of the Planet of the Apes",
+                Genre = genres.Take(2).ToArray()
             };
 
             // Act and Assert
             Assert.That(async () =>
-                await Add_ThrowException(candidate, errorMessage),
+                await Add_ThrowException(item, errorMessage),
                 Throws.Exception.TypeOf<Exception>().And.Message.EqualTo(errorMessage));
         }
 
@@ -157,64 +157,67 @@ namespace Cosmos.UnitTests
         public async Task Update_Success()
         {
             // Arrange
-            var candidate = new Candidate
+            var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                FirstName = "Solly",
-                LastName = "Fathi",
-                Email = "mail@gmail.com",
-                RegistrationDate = DateTime.Now,
-                Technologies = technologies.Take(2).ToArray()
+                Title = "Kingdom of the Planet of the Apes",
+                MovieID = "KOTPA123",
+                Poster = "https://example.com/poster.jpg",
+                MovieRatings = [],
+                Price = 100,
+                ReleaseDate = DateTime.Now,
+                Genre = genres.Take(2).ToArray(),
+                IsActive = true
             };
 
-            var mockService = new Mock<ICandidateService>();
-            mockService.Setup(x => x.UpdateAsync(candidate.Id, candidate.LastName, It.IsAny<Candidate>())).Returns(async () =>
+            var mockService = new Mock<IMovieService>();
+            mockService.Setup(x => x.UpdateAsync(item.Id, It.IsAny<Movie>())).Returns(async () =>
             {
                 await Task.Yield();
-                return candidate;
+                return item;
             });
 
             // Act
-            await mockService.Object.UpdateAsync(candidate.Id, candidate.LastName, candidate);
+            await mockService.Object.UpdateAsync(item.Id, item);
 
             // Assert
-            mockService.Verify(m => m.UpdateAsync(candidate.Id, candidate.LastName, It.IsAny<Candidate>()), Times.AtLeastOnce());
-            Assert.That(candidate.FirstName, Is.EqualTo("Solly"));
+            mockService.Verify(m => m.UpdateAsync(item.Id, It.IsAny<Movie>()), Times.AtLeastOnce());
+            Assert.That(item.MovieID, Is.EqualTo("KOTPA123"));
         }
 
         [Test]
         public async Task Delete_Success()
         {
             // Arrange
-            var candidate = new Candidate
+            var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                FirstName = "Solly",
-                LastName = "Fathi",
-                Technologies = technologies.Take(2).ToArray()
+                Title = "Kingdom of the Planet of the Apes",
+                MovieID = "KOTPA123",
+                Genre = genres.Take(2).ToArray()
             };
 
-            var mockService = new Mock<ICandidateService>();
-            mockService.Setup(x => x.DeleteAsync(candidate.Id)).Returns(async () =>
+            var mockService = new Mock<IMovieService>();
+            mockService.Setup(x => x.DeleteAsync(item.Id)).Returns(async () =>
             {
                 await Task.Yield();
-                return candidate;
+                return item;
             });
 
             // Act
-            await mockService.Object.DeleteAsync(candidate.Id);
-            var actual = await mockService.Object.GetAsync(candidate.Id);
+            await mockService.Object.DeleteAsync(item.Id);
+            var actual = await mockService.Object.GetAsync(item.Id);
 
             // Assert
-            mockService.Verify(m => m.DeleteAsync(candidate.Id));
-            mockService.Verify(m => m.GetAsync(candidate.Id));
+            mockService.Verify(m => m.DeleteAsync(item.Id));
+            mockService.Verify(m => m.GetAsync(item.Id));
             Assert.AreEqual(null, actual);
         }
 
-        static async Task Add_ThrowException(Candidate candidate, string errorMessage)
+        static async Task Add_ThrowException(Movie item, string errorMessage)
         {
-            var mockService = new Mock<ICandidateService>();
-            await mockService.Object.CreateAsync(candidate).ConfigureAwait(false);
+            var mockService = new Mock<IMovieService>();
+            await mockService.Object.CreateAsync(item).ConfigureAwait(false);
             throw new Exception(errorMessage);
         }
     }

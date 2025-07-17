@@ -2,7 +2,7 @@
 
 namespace Cosmos.Api.HubConfig
 {
-    public class CandidateHub : Hub
+    public class MovieHub : Hub
     {
     }
 }

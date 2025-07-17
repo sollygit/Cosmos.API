@@ -8,47 +8,45 @@ namespace Cosmos.Common
 {
     public static class BogusUtil
     {
-        public static List<Candidate> Candidates(int count)
+        public static List<Movie> Movies(int count)
         {
-            var candidates = new List<Candidate>();
+            var movies = new List<Movie>();
 
             for (int i = 0; i < count; i++)
             {
-                candidates.Add(GetCandidate());
+                movies.Add(GetMovie());
             }
 
-            return candidates;
+            return movies;
         }
 
-        private static Candidate GetCandidate(bool isActive = true)
+        private static Movie GetMovie(bool isActive = true)
         {
-            // Mockup a candidate
-            return new Faker<Candidate>()
+            return new Faker<Movie>()
                 .RuleFor(c => c.Id, f => Guid.NewGuid().ToString("N"))
-                .RuleFor(c => c.FirstName, f => f.Name.FirstName())
-                .RuleFor(c => c.LastName, f => f.Name.LastName())
-                .RuleFor(c => c.Email, f => f.Internet.Email().ToLower())
-                .RuleFor(c => c.Balance, f => decimal.Parse(f.Random.Decimal(10000).ToString("0.##")))
-                .RuleFor(c => c.Points, f => f.Random.Number(100))
-                .RuleFor(c => c.RegistrationDate, f => f.Date.Recent(30))
-                .RuleFor(c => c.Technologies, GetTechnologies(3))
-                .RuleFor(c => c.IsActive, isActive)
+                .RuleFor(o => o.MovieID, f => f.Random.AlphaNumeric(9).ToUpper())
+                .RuleFor(o => o.Title, f => f.Lorem.Sentence(3))
+                .RuleFor(c => c.ReleaseDate, f => f.Date.Past(30))
+                .RuleFor(o => o.Poster, f => f.Image.PicsumUrl(640, 480, true))
+                .RuleFor(o => o.Price, f => decimal.Parse(f.Random.Decimal(1000).ToString("0.##")))
+                .RuleFor(o => o.Genre, GetGenre(3))
+                .RuleFor(o => o.IsActive, isActive)
                 .Generate(1)
                 .FirstOrDefault();
         }
 
-        private static string[] GetTechnologies(int count)
+        private static string[] GetGenre(int count)
         {
-            var technologies = new Faker<Technology>()
-                .RuleFor(o => o.Name, f => f.Rant.Random.CollectionItem(Constants.Technologies))
+            var genres = new Faker<Genre>()
+                .RuleFor(o => o.Name, f => f.Rant.Random.CollectionItem(Constants.Genres))
                 .Generate(count)
                 .Select(o => o.Name)
                 .Distinct()
                 .ToArray();
-            return technologies;
+            return genres;
         }
 
-        class Technology
+        class Genre
         {
             public string Name { get; set; }
         }

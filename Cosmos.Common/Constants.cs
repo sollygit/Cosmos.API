@@ -4,9 +4,18 @@ namespace Cosmos.Common
 {
     public class Constants
     {
-        public static IList<string> Technologies => new string[]
+        public static IList<string> Genres => new string[]
         {
-            "Angular", "Azure", "Blazor", "C#", "MVC", "SQL"
+            "Action",
+            "Adventure",
+            "Comedy",
+            "Documentary",
+            "Drama",
+            "Fantasy",
+            "Romance",
+            "Science Fiction",
+            "Television",
+            "Thriller"
         };
     }
 }

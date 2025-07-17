@@ -15,72 +15,88 @@ namespace Cosmos.FunctionsApp
             _logger = loggerFactory.CreateLogger<CosmosWebJob>();
         }
 
-        [Function("CreateCandidate")]
+        [Function("CreateMovie")]
         [CosmosDBOutput(
             "%DatabaseName%",
             "%ContainerName%",
             Connection = "CosmosDBConnectionString")]
         public async Task<object> Create(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "candidate")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "movie")] HttpRequest req,
             [CosmosDBInput(
                 databaseName: "%DatabaseName%",
                 containerName: "%ContainerName%",
                 Connection = "CosmosDBConnectionString")]
-            IReadOnlyList<Candidate> input)
+            IReadOnlyList<Movie> input)
         {
             var request = await new StreamReader(req.Body).ReadToEndAsync();
-            var candidate = JsonConvert.DeserializeObject<Candidate>(request)!;
+            var movie = JsonConvert.DeserializeObject<Movie>(request)!;
 
-            _logger.LogInformation("Create:{FullName}, ID:{Id}", candidate.FullName, candidate.Id);
+            _logger.LogInformation($"Movie with ID '{movie.Id}' created successfully");
 
             // Cosmos Output
-            return input.Select(p => new { 
-                id = candidate.Id,
-                firstName = candidate.FirstName,
-                lastName = candidate.LastName,
-                email = candidate.Email,
-                balance = candidate.Balance,
-                points = candidate.Points,
-                registrationDate = candidate.RegistrationDate,
-                isActive = candidate.IsActive,
-                technologies = candidate.Technologies
+            return input.Select(p => new {
+                movieID = movie.MovieID,
+                title = movie.Title,
+                releaseDate = movie.ReleaseDate,
+                price = movie.Price,
+                poster = movie.Poster,
+                year = movie.Year,
+                genere = movie.Genre,
+                movieRatings = movie.MovieRatings.Select(r => new {
+                    rated = r.Rated,
+                    language = r.Language,
+                    metascore = r.Metascore,
+                    rating = r.Rating,
+                    votes = r.Votes
+                }),
+                isActive = movie.IsActive,
+                id = movie.Id,
+                type = movie.Type
             });
         }
 
-        [Function("UpdateCandidate")]
+        [Function("UpdateMovie")]
         [CosmosDBOutput(
             "%DatabaseName%",
             "%ContainerName%",
             Connection = "CosmosDBConnectionString")]
         public async Task<object> Update(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "candidate/{id}")] HttpRequest req, Guid id,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "movie/{id}")] HttpRequest req, string id,
             [CosmosDBInput(
                 databaseName: "%DatabaseName%",
                 containerName: "%ContainerName%",
                 Connection = "CosmosDBConnectionString")]
-            IReadOnlyList<Candidate> input)
+            IReadOnlyList<Movie> input)
         {
             var request = await new StreamReader(req.Body).ReadToEndAsync();
-            var candidate = JsonConvert.DeserializeObject<Candidate>(request)!;
+            var movie = JsonConvert.DeserializeObject<Movie>(request)!;
 
-            if (input == null || !input.Any(o => o.Id == id.ToString())) return null!;
+            if (input == null || !input.Any(o => o.Id == id)) return null!;
 
-            _logger.LogInformation("Update:{FullName}, ID:{id}", candidate.FullName, id);
+            _logger.LogInformation($"Movie with ID '{movie.Id}' updated successfully");
 
             // Cosmos Output
             return input
-                .Where(o => o.Id == id.ToString())
+                .Where(o => o.Id == id)
                 .Select(o => new
                 {
+                    movieID = movie.MovieID,
+                    title = movie.Title,
+                    releaseDate = movie.ReleaseDate,
+                    price = movie.Price,
+                    poster = movie.Poster,
+                    year = movie.Year,
+                    genere = movie.Genre,
+                    movieRatings = movie.MovieRatings.Select(r => new {
+                        rated = r.Rated,
+                        language = r.Language,
+                        metascore = r.Metascore,
+                        rating = r.Rating,
+                        votes = r.Votes
+                    }),
+                    isActive = movie.IsActive,
                     id = o.Id,
-                    lastName = candidate.LastName,
-                    firstName = candidate.FirstName,
-                    email = candidate.Email,
-                    balance = candidate.Balance,
-                    points = candidate.Points,
-                    registrationDate = candidate.RegistrationDate,
-                    isActive = candidate.IsActive,
-                    technologies = candidate.Technologies
+                    type = o.Type
                 });
         }
     }
