@@ -1,0 +1,7 @@
+<h4>Movie Details</h4>
+<ng-container *ngIf="movie; else loading">
+    <pre [@fadeInOut] class="full-profile">{{ movie | json }}</pre>
+</ng-container>
+<ng-template #loading>
+    <mat-progress-bar *ngIf="!movie" mode="indeterminate"></mat-progress-bar>
+</ng-template>

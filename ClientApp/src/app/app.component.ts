@@ -7,6 +7,6 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Candidate Client';
+  title = 'Movie Client';
   swaggerUrl = `${environment.baseUrl}`;
 }

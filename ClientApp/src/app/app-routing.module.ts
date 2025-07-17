@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CandidatesComponent } from './components/candidates/candidates.component';
-import { CandidateComponent } from './components/candidate/candidate.component';
-import { CandidateAddEditComponent } from './components/candidate-add-edit/candidate-add-edit.component';
+import { MoviesComponent } from './components/movies/movies.component';
+import { MovieComponent } from './components/movie/movie.component';
+import { MovieAddEditComponent } from './components/movie-add-edit/movie-add-edit.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { BoardComponent } from './components/board/board.component';
 
 const routes: Routes = [
-  { path: '', component: CandidatesComponent, pathMatch: 'full' },
-  { path: 'candidate/:id', component: CandidateComponent },
-  { path: 'add', component: CandidateAddEditComponent },
-  { path: 'candidate/edit/:id', component: CandidateAddEditComponent },
+  { path: '', component: MoviesComponent, pathMatch: 'full' },
+  { path: 'movie/:id', component: MovieComponent },
+  { path: 'add', component: MovieAddEditComponent },
+  { path: 'movie/edit/:id', component: MovieAddEditComponent },
   { path: 'chart', component: ChartComponent },
   { path: 'board', component: BoardComponent },
   { path: '**', redirectTo: '/' }

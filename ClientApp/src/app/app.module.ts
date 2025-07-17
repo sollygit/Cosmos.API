@@ -8,24 +8,24 @@ import { MatInputModule, MatButtonModule, MatSelectModule, MatCheckboxModule,
 import { AppRoutingModule } from './app-routing.module';
 import { ChartsModule, ThemeService } from 'ng2-charts';
 import { SessionStorageService } from './services/sessionStorage.service';
-import { CandidateService } from './services/candidate.service';
+import { MovieService } from './services/movie.service';
 import { ChartService } from './services/chart.service';
-import { CandidateSignalRService } from './services/signal-r/candidate.signal-r.service';
+import { MovieSignalRService } from './services/signal-r/movie.signal-r.service';
 import { ChartSignalRService } from './services/signal-r/chart.signal-r.service';
 import { BoardSignalRService } from './services/signal-r/board.signal-r.service';
 import { AppComponent } from './app.component';
-import { CandidatesComponent } from './components/candidates/candidates.component';
-import { CandidateComponent } from './components/candidate/candidate.component';
-import { CandidateAddEditComponent } from './components/candidate-add-edit/candidate-add-edit.component';
+import { MoviesComponent } from './components/movies/movies.component';
+import { MovieComponent } from './components/movie/movie.component';
+import { MovieAddEditComponent } from './components/movie-add-edit/movie-add-edit.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { BoardComponent } from './components/board/board.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CandidatesComponent,
-    CandidateComponent,
-    CandidateAddEditComponent,
+    MoviesComponent,
+    MovieComponent,
+    MovieAddEditComponent,
     ChartComponent,
     BoardComponent
   ],
@@ -43,14 +43,13 @@ import { BoardComponent } from './components/board/board.component';
     HttpClientModule,
     AppRoutingModule,
     ChartsModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule
+    ReactiveFormsModule
   ],
   providers: [
     SessionStorageService,
-    CandidateService,
+    MovieService,
     ChartService,
-    CandidateSignalRService,
+    MovieSignalRService,
     ChartSignalRService,
     BoardSignalRService,
     ThemeService

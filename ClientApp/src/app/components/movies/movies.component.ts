@@ -2,26 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'src/app/services/sessionStorage.service';
-import { CandidateSignalRService } from 'src/app/services/signal-r/candidate.signal-r.service';
-import { CandidateService } from '../../services/candidate.service';
-import { Candidate } from '../../models/candidate';
+import { MovieSignalRService } from 'src/app/services/signal-r/movie.signal-r.service';
+import { MovieService } from '../../services/movie.service';
+import { Movie } from '../../models/movie';
 import { fadeInOut } from '../../services/animations';
 import { DBkeys } from 'src/app/services/db-keys';
 
 @Component({
-  selector: 'app-candidates',
-  templateUrl: './candidates.component.html',
-  styleUrls: ['./candidates.component.css'],
+  selector: 'app-movies',
+  templateUrl: './movies.component.html',
+  styleUrls: ['./movies.component.css'],
   animations: [fadeInOut]
 })
-export class CandidatesComponent implements OnInit {
-  candidateUrl = `${environment.baseUrl}/api/candidate`;
+export class MoviesComponent implements OnInit {
+  movieUrl = `${environment.baseUrl}/api/movie`;
   active = true;
 
   constructor(
     private sessionStorage: SessionStorageService,
-    private candidateService: CandidateService,
-    private signalRService: CandidateSignalRService,
+    private movieService: MovieService,
+    private signalRService: MovieSignalRService,
     private http: HttpClient) { }
 
   ngOnInit() {
@@ -32,38 +32,38 @@ export class CandidatesComponent implements OnInit {
 
   startConnection() {
     this.signalRService.startConnection();
-    this.signalRService.addSendCandidatesListener(this.isActive);
+    this.signalRService.addSendMoviesListener(this.isActive);
     this.startHttpRequest();
   }
 
   startHttpRequest = () => {
-    this.http.get(this.candidateUrl)
+    this.http.get(this.movieUrl)
       .subscribe(res => {
         console.log(res);
-        this.getCandidates();
+        this.getMovies();
       });
   }
 
-  getCandidates() {
-    this.candidateService.getAll()
-      .subscribe(candidates => {
-        this.candidates = candidates.filter(c => c.isActive === this.isActive);
+  getMovies() {
+    this.movieService.getAll()
+      .subscribe(movies => {
+        this.movies = movies.filter(c => c.isActive === this.isActive);
       });
   }
 
   delete(id: string) {
     const result = confirm('Are you sure?');
     if (result) {
-      this.candidateService.delete(id).subscribe(() => {
-        this.getCandidates();
+      this.movieService.delete(id).subscribe(() => {
+        this.getMovies();
       });
     }
   }
 
-  set candidates(value: Candidate[]) {
+  set movies(value: Movie[]) {
     this.signalRService.data = value;
   }
-  get candidates(): Candidate[] {
+  get movies(): Movie[] {
     return this.signalRService.data;
   }
   set isActive(value: boolean) {

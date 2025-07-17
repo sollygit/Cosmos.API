@@ -1,10 +1,14 @@
 export class Constants {
-    public static readonly TECHNOLOGIES = [
-        'Angular',
-        'Azure',
-        'Blazor',
-        'C#',
-        'MVC',
-        'SQL'
+    public static readonly GENRE = [
+        'Action',
+        'Adventure',
+        'Comedy',
+        'Documentary',
+        'Drama',
+        'Fantasy',
+        'Romance',
+        'Science Fiction',
+        'Television',
+        'Thriller'
     ];
 }

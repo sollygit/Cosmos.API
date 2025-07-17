@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { HubConnectionState } from '@aspnet/signalr';
 import { environment } from 'src/environments/environment';
-import { Candidate } from '../../models/candidate';
+import { Movie } from '../../models/movie';
 
 @Injectable()
-export class CandidateSignalRService {
-  private candidateUrl: string;
+export class MovieSignalRService {
+  private movieUrl: string;
   private hubConnection: signalR.HubConnection;
-  public data: Candidate[];
+  public data: Movie[];
 
   public get isConnected(): boolean {
     return this.hubConnection
@@ -16,13 +16,13 @@ export class CandidateSignalRService {
   }
 
   constructor() {
-    this.candidateUrl = `${environment.baseUrl}/candidate`;
+    this.movieUrl = `${environment.baseUrl}/movie`;
   }
 
   public startConnection = () => {
     this.hubConnection = new signalR.HubConnectionBuilder()
       .configureLogging(signalR.LogLevel.Debug)
-      .withUrl(this.candidateUrl)
+      .withUrl(this.movieUrl)
       .build();
     this.hubConnection
       .start()
@@ -32,8 +32,8 @@ export class CandidateSignalRService {
       .catch(err => console.log('Error while starting connection: ' + err));
   }
 
-  public addSendCandidatesListener = (isActive: boolean) => {
-    this.hubConnection.on('sendCandidates', (data: Candidate[]) => {
+  public addSendMoviesListener = (isActive: boolean) => {
+    this.hubConnection.on('sendMovies', (data: Movie[]) => {
       this.data = data.filter(o => o.isActive === isActive);
       console.log(data);
     });

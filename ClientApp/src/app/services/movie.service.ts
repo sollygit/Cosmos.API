@@ -3,10 +3,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Candidate } from '../models/candidate';
+import { Movie } from '../models/movie';
 
 @Injectable()
-export class CandidateService {
+export class MovieService {
   getAllUrl: string;
   getUrl: string;
   saveUrl: string;
@@ -18,15 +18,15 @@ export class CandidateService {
     })
   };
   constructor(private http: HttpClient) {
-      this.getAllUrl = `${environment.baseUrl}/api/Candidate/All`;
-      this.getUrl = `${environment.baseUrl}/api/Candidate/Get`;
-      this.saveUrl = `${environment.baseUrl}/api/Candidate/Create`;
-      this.updateUrl = `${environment.baseUrl}/api/Candidate/Update`;
-      this.deleteUrl = `${environment.baseUrl}/api/Candidate`;
+      this.getAllUrl = `${environment.baseUrl}/api/Movie/All`;
+      this.getUrl = `${environment.baseUrl}/api/Movie/Get`;
+      this.saveUrl = `${environment.baseUrl}/api/Movie/Create`;
+      this.updateUrl = `${environment.baseUrl}/api/Movie/Update`;
+      this.deleteUrl = `${environment.baseUrl}/api/Movie`;
   }
 
-  getAll(): Observable<Candidate[]> {
-    const result = this.http.get<Candidate[]>(this.getAllUrl);
+  getAll(): Observable<Movie[]> {
+    const result = this.http.get<Movie[]>(this.getAllUrl);
     return result.pipe(map(response => {
       if (response == null) {
         catchError(this.errorHandler);
@@ -35,32 +35,32 @@ export class CandidateService {
     }));
   }
 
-  get(id: string): Observable<Candidate> {
-      return this.http.get<Candidate>(`${this.getUrl}/${id}`)
+  get(id: string): Observable<Movie> {
+      return this.http.get<Movie>(`${this.getUrl}/${id}`)
       .pipe(
         retry(1),
         catchError(this.errorHandler)
       );
   }
 
-  save(candidate: Candidate): Observable<Candidate> {
-      return this.http.post<Candidate>(this.saveUrl, JSON.stringify(candidate), this.httpOptions)
+  save(item: Movie): Observable<Movie> {
+      return this.http.post<Movie>(this.saveUrl, JSON.stringify(item), this.httpOptions)
       .pipe(
         retry(1),
         catchError(this.errorHandler)
       );
   }
 
-  update(id: string, candidate: Candidate): Observable<Candidate> {
-      return this.http.put<Candidate>(`${this.updateUrl}/${id}`, JSON.stringify(candidate), this.httpOptions)
+  update(id: string, item: Movie): Observable<Movie> {
+      return this.http.put<Movie>(`${this.updateUrl}/${id}`, JSON.stringify(item), this.httpOptions)
       .pipe(
         retry(1),
         catchError(this.errorHandler)
       );
   }
 
-  delete(id: string): Observable<Candidate> {
-      return this.http.delete<Candidate>(`${this.deleteUrl}/${id}`)
+  delete(id: string): Observable<Movie> {
+      return this.http.delete<Movie>(`${this.deleteUrl}/${id}`)
       .pipe(
         retry(1),
         catchError(this.errorHandler)
