@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Cosmos.UnitTests
 {
     [TestFixture]
-    public class CandidateServiceTest
+    public class MovieServiceTest
     {
         private IQueryable<Movie> movies;
         private List<string> genres;
@@ -135,7 +135,7 @@ namespace Cosmos.UnitTests
         }
 
         [Test]
-        public void Add_FirstNameIsEmpty_Failure_Throws()
+        public void Add_TitleIsEmpty_Failure_Throws()
         {
             string errorMessage = "Title cannot be empty";
 
@@ -143,7 +143,7 @@ namespace Cosmos.UnitTests
             var item = new Movie
             {
                 Id = Guid.NewGuid().ToString("n"),
-                Title = "Kingdom of the Planet of the Apes",
+                Title = null,
                 Genre = genres.Take(2).ToArray()
             };
 
