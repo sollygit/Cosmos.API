@@ -41,7 +41,7 @@ namespace Cosmos.FunctionsApp
                 price = movie.Price,
                 poster = movie.Poster,
                 year = movie.Year,
-                genere = movie.Genre,
+                genre = movie.Genre,
                 movieRatings = movie.MovieRatings.Select(r => new {
                     rated = r.Rated,
                     language = r.Language,
@@ -86,7 +86,7 @@ namespace Cosmos.FunctionsApp
                     price = movie.Price,
                     poster = movie.Poster,
                     year = movie.Year,
-                    genere = movie.Genre,
+                    genre = movie.Genre,
                     movieRatings = movie.MovieRatings.Select(r => new {
                         rated = r.Rated,
                         language = r.Language,
