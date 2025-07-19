@@ -11,6 +11,13 @@
       "type": "appInsights.azure",
       "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING",
       "dynamicId": null
+    },
+    "storage2": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('serviceConnectorResourceGroupName')]/providers/Microsoft.Web/sites/CosmosDB-Functions/providers/Microsoft.ServiceLinker/linkers/StorageConnection_9192A7C4BE, /subscriptions/8c1b5dd9-3ab7-4ee7-89f4-08911a5ff0e2/resourceGroups/CosmosDBFunctionsResourceGroup/providers/Microsoft.Web/sites/CosmosDB-Functions/providers/Microsoft.ServiceLinker/linkers/StorageConnection_B1CDBA922B",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/azstorageaccountinstance",
+      "type": "storage.azure",
+      "connectionId": "StorageConnection"
     }
   }
 }
