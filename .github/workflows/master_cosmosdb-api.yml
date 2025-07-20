@@ -5,6 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - CosmosDB-API
 
 on:
   push:
+    paths-ignore:
+      - 'Cosmos.FunctionsApp/**'
     branches:
       - master
   workflow_dispatch:
