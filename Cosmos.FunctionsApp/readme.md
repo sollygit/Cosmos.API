@@ -1,6 +1,6 @@
 # TimerTrigger - C<span>#</span>
 
-The `TimerTrigger` makes your functions executed on a schedule. This sample demonstrates a simple use case of calling your function every 5 minutes.
+The `TimerTrigger` makes your functions executed on a given schedule. This sample demonstrates a simple use case of calling your function every 5 minutes.
 
 ## How it works
 
