@@ -2,22 +2,6 @@ param location string
 param namePrefix string
 param accountType string
 param kind string
-param accessTier string
-param supportsHttpsTrafficOnly bool
-param allowBlobPublicAccess bool
-param isShareSoftDeleteEnabled bool
-param minimumTlsVersion string
-param allowSharedKeyAccess bool
-param defaultOAuth bool
-param publicNetworkAccess string
-param allowCrossTenantReplication bool
-param networkAclsBypass string
-param networkAclsDefaultAction string
-param networkAclsIpRules array
-param largeFileSharesState string
-param keySource string
-param encryptionEnabled bool
-param infrastructureEncryptionEnabled bool
 
 resource stg 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: '${namePrefix}storageaccountinstance'
@@ -28,38 +12,14 @@ resource stg 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
   tags: {}
   properties: {
-    minimumTlsVersion: minimumTlsVersion
-    supportsHttpsTrafficOnly: supportsHttpsTrafficOnly
-    allowBlobPublicAccess: allowBlobPublicAccess
-    allowSharedKeyAccess: allowSharedKeyAccess
-    defaultToOAuthAuthentication: defaultOAuth
-    accessTier: accessTier
-    publicNetworkAccess: publicNetworkAccess
-    allowCrossTenantReplication: allowCrossTenantReplication
-    networkAcls: {
-      bypass: networkAclsBypass
-      defaultAction: networkAclsDefaultAction
-      ipRules: networkAclsIpRules
-    }
-    largeFileSharesState: largeFileSharesState
-    encryption: {
-      keySource: keySource
-      services: {
-        blob: {
-          enabled: encryptionEnabled
-        }
-        file: {
-          enabled: encryptionEnabled
-        }
-        table: {
-          enabled: encryptionEnabled
-        }
-        queue: {
-          enabled: encryptionEnabled
-        }
-      }
-      requireInfrastructureEncryption: infrastructureEncryptionEnabled
-    }
+    supportsHttpsTrafficOnly: true
+    allowBlobPublicAccess: true
+    allowSharedKeyAccess: true
+    defaultToOAuthAuthentication: false
+    allowCrossTenantReplication: false
+    accessTier: 'Cool'
+    publicNetworkAccess: 'Enabled'
+    minimumTlsVersion: 'TLS1_2'
   }
   dependsOn: []
 }
@@ -70,7 +30,7 @@ resource stg_default 'Microsoft.Storage/storageAccounts/fileservices@2023-05-01'
   properties: {
     protocolSettings: null
     shareDeleteRetentionPolicy: {
-      enabled: isShareSoftDeleteEnabled
+      enabled: false
     }
   }
 }
@@ -80,6 +40,17 @@ resource blobContainer 'Microsoft.Storage/storageAccounts/blobServices/container
   properties: {
     publicAccess: 'Blob'
   }
+}
+
+resource tableService 'Microsoft.Storage/storageAccounts/tableServices@2023-05-01' = {
+  parent: stg
+  name: 'default'
+}
+
+resource boardTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
+  parent: tableService
+  name: 'board'
+  properties: {}
 }
 
 output blobUri string = stg.properties.primaryEndpoints.blob

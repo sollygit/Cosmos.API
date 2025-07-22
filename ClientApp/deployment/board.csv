@@ -1,0 +1,5 @@
+PartitionKey,RowKey,IntValue,IntValue@type,StringValue,StringValue@type
+BOARD,AudienceCount,5,Int32,,
+BOARD,CommentCount,4,Int32,,
+BOARD,NoticeCount,7,Int32,,
+BOARD,NoticeText,0,Int32,This is a Postman new notice,String

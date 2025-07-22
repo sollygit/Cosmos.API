@@ -1,0 +1,10 @@
+az bicep version
+
+# Create the storage account
+az deployment group create -g StorageAccountResourceGroup --template-file .\main.bicep
+
+# Delete the storage account
+az storage account delete -g StorageAccountResourceGroup --name azstorageaccountinstance --yes
+
+# List available storage accounts
+az storage account list -g StorageAccountResourceGroup -o table
