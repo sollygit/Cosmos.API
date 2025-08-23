@@ -142,7 +142,6 @@
     width: auto;
     min-width: 30%;
     position: relative;
-    display: none;
   }
 
   .card.card.highlight-card span {

@@ -5,7 +5,13 @@ export class AppPage {
     return browser.get(browser.baseUrl) as Promise<any>;
   }
 
-  getTitleText() {
-    return element(by.css('app-root .content span')).getText() as Promise<string>;
+  navigateToAdd() {
+    return browser.get(`${browser.baseUrl}/add`) as Promise<any>;
   }
+
+  getBaseUrl() {
+    const swagger = element(by.css('mat-icon#settings-icon')).element(by.xpath('..'));
+    return swagger.getAttribute('href') as Promise<string>;
+  }
+
 }

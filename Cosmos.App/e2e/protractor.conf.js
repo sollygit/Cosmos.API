@@ -16,7 +16,8 @@ exports.config = {
     browserName: 'chrome'
   },
   directConnect: true,
-  baseUrl: 'http://localhost:4200/',
+  chromeDriver: 'C:/Git/Cosmos.API/Cosmos.App/drivers/chromedriver_139.0.7258.138.exe',
+  baseUrl: 'http://localhost:44382/',
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,

@@ -1,16 +1,28 @@
 import { AppPage } from './app.po';
 import { browser, logging } from 'protractor';
+import { environment } from '../../src/environments/environment';
 
-describe('workspace-project App', () => {
+describe('CosmosApp', () => {
   let page: AppPage;
 
-  beforeEach(() => {
+  beforeAll(async () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', async () => {
-    page.navigateTo();
-    await expectAsync(page.getTitleText()).toBeResolvedTo('');
+  it('should display page title', async () => {
+    await page.navigateTo();
+    expect(await browser.getTitle()).toEqual('CosmosApp');
+  });
+
+  it('should have a valid base URL', async () => {
+    await page.navigateTo();
+    const baseUrl = await page.getBaseUrl();
+    expect(baseUrl).toEqual(`${environment.baseUrl}/`);
+  });
+
+  it('should navigate to the Add Movie', async () => {
+    await page.navigateToAdd();
+    expect(await browser.getCurrentUrl()).toContain('/add');
   });
 
   afterEach(async () => {
