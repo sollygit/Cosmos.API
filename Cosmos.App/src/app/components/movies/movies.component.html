@@ -7,8 +7,9 @@
     <tr>
       <th>MovieID</th>
       <th>Title</th>
-      <th>Release Date</th>
       <th>Genre</th>
+      <th>Release Date</th>
+      <th>Price</th>
       <th></th>
       <th></th>
     </tr>
@@ -17,8 +18,9 @@
     <tr *ngFor="let movie of movies">
       <td><a [routerLink]="['/movie/', movie.id]">{{ movie.movieID }}</a></td>
       <td>{{ movie.title }}</td>
-      <td>{{ movie.releaseDate | date: "dd/MM/yy HH:mm" }}</td>
       <td>{{ movie.genre }}</td>
+      <td>{{ movie.releaseDate | date: "dd/MM/yyyy" }}</td>
+      <td>{{ movie.price | number:'1.2-2' }}</td>
       <td><a [routerLink]="['/movie/edit/', movie.id]" class="btn btn-link btn-sm float-right">Edit</a></td>
       <td><a [routerLink]="" (click)="delete(movie.id)" class="btn btn-link btn-sm float-right">Delete</a></td>
     </tr>

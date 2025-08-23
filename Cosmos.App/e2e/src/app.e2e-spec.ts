@@ -8,7 +8,7 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', async() => {
+  it('should display welcome message', async () => {
     page.navigateTo();
     await expectAsync(page.getTitleText()).toBeResolvedTo('');
   });
