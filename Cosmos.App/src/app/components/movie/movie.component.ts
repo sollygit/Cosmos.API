@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { JsonPipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { MovieService } from '../../services/movie.service';
 import { Movie } from '../../models/movie';
@@ -6,6 +7,8 @@ import { fadeInOut } from '../../services/animations';
 
 @Component({
   selector: 'app-movie',
+  standalone: false,
+  providers: [JsonPipe],
   templateUrl: './movie.component.html',
   styleUrls: ['./movie.component.css'],
   animations: [fadeInOut]

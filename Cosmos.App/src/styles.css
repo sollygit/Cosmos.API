@@ -4,3 +4,7 @@
 table .table-sm th, td {
     vertical-align: middle !important;
 }
+
+.mat-mdc-slide-toggle .mdc-label {
+  margin-bottom: 0;
+}

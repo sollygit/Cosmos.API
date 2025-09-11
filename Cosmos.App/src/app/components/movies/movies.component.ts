@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { SessionStorageService } from 'src/app/services/sessionStorage.service';
@@ -10,6 +11,8 @@ import { DBkeys } from 'src/app/services/db-keys';
 
 @Component({
   selector: 'app-movies',
+  standalone: false,
+  providers: [DatePipe, DecimalPipe],
   templateUrl: './movies.component.html',
   styleUrls: ['./movies.component.css'],
   animations: [fadeInOut]

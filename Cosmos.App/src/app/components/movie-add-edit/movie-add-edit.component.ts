@@ -7,6 +7,7 @@ import { Constants } from 'src/app/services/constants';
 import { fadeInOut } from '../../services/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-movie-add-edit',
   templateUrl: './movie-add-edit.component.html',
   styleUrls: ['./movie-add-edit.component.css'],

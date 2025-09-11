@@ -1,6 +1,6 @@
 <h4>Movies</h4>
 <mat-progress-bar *ngIf="!movies" mode="indeterminate"></mat-progress-bar>
-<mat-slide-toggle class="float-left mt-2" (click)="getMovies()" [(ngModel)]="isActive">Active</mat-slide-toggle>
+<mat-slide-toggle class="float-left mt-2" (change)="getMovies()" [(ngModel)]="isActive">Active</mat-slide-toggle>
 <a [routerLink]="['/add']" class="btn btn-success float-right mb-3">Create</a>
 <table [@fadeInOut] class="table table-sm table-hover" *ngIf="movies?.length > 0">
   <thead>
@@ -16,13 +16,13 @@
   </thead>
   <tbody>
     <tr *ngFor="let movie of movies">
-      <td><a [routerLink]="['/movie/', movie.id]">{{ movie.movieID }}</a></td>
+      <td><a [routerLink]="['/movie', movie.id]">{{ movie.movieID }}</a></td>
       <td>{{ movie.title }}</td>
       <td>{{ movie.genre }}</td>
-      <td>{{ movie.releaseDate | date: "dd/MM/yyyy" }}</td>
-      <td>{{ movie.price | number:'1.2-2' }}</td>
-      <td><a [routerLink]="['/movie/edit/', movie.id]" class="btn btn-link btn-sm float-right">Edit</a></td>
-      <td><a [routerLink]="" (click)="delete(movie.id)" class="btn btn-link btn-sm float-right">Delete</a></td>
+      <td>{{ movie.releaseDate | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ movie.price | number: '1.2-2' }}</td>
+      <td><a [routerLink]="['/movie/edit', movie.id]" class="btn btn-link btn-sm float-right">Edit</a></td>
+      <td><button type="button" (click)="delete(movie.id)" class="btn btn-link btn-sm float-right">Delete</button></td>
     </tr>
   </tbody>
 </table>

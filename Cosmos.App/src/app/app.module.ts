@@ -1,17 +1,16 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { AppRoutingModule } from './app-routing.module';
-import { ChartsModule, ThemeService } from 'ng2-charts';
+import { NgChartsModule, ThemeService } from 'ng2-charts';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { SessionStorageService } from './services/sessionStorage.service';
 import { MovieService } from './services/movie.service';
 import { ChartService } from './services/chart.service';
@@ -24,8 +23,27 @@ import { MovieComponent } from './components/movie/movie.component';
 import { MovieAddEditComponent } from './components/movie-add-edit/movie-add-edit.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { BoardComponent } from './components/board/board.component';
+import { CommonModule, JsonPipe, DatePipe, DecimalPipe } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { appRoutes } from './app-routing.module';
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatIconModule,
+    MatProgressBarModule,
+    MatSlideToggleModule,
+    CommonModule,
+    NgChartsModule,
+    RouterModule.forRoot(appRoutes)
+  ],
   declarations: [
     AppComponent,
     MoviesComponent,
@@ -34,30 +52,18 @@ import { BoardComponent } from './components/board/board.component';
     ChartComponent,
     BoardComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatSelectModule,
-    MatIconModule,
-    MatProgressBarModule,
-    MatSlideToggleModule,
-    HttpClientModule,
-    AppRoutingModule,
-    ChartsModule,
-    ReactiveFormsModule
-  ],
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
     SessionStorageService,
     MovieService,
     ChartService,
     MovieSignalRService,
     ChartSignalRService,
     BoardSignalRService,
-    ThemeService
+    ThemeService,
+    JsonPipe,
+    DatePipe,
+    DecimalPipe
   ],
   bootstrap: [AppComponent]
 })

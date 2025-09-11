@@ -6,6 +6,7 @@ import { Chart } from '../../models/chart';
 import { ChartService } from 'src/app/services/chart.service';
 
 @Component({
+  standalone: false,
   selector: 'app-chart',
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.css']
@@ -16,22 +17,14 @@ export class ChartComponent implements OnInit {
     scaleShowVerticalLines: true,
     responsive: true,
     scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
+      y: {
+        beginAtZero: true
+      }
     }
   };
   public chartLabels: string[] = ['Change feed listener based chart data'];
   public chartType = 'bar';
   public chartLegend = true;
-  public colors: any[] = [
-    { backgroundColor: '#5491DA' },
-    { backgroundColor: '#E74C3C' },
-    { backgroundColor: '#82E0AA' },
-    { backgroundColor: '#E5E7E9' }
-  ];
 
   constructor(
     private chartService: ChartService,
